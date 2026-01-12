@@ -1,0 +1,25 @@
+{
+  "active": true,
+  "spec": "001-i-want-to-build-a-completely-automated-futures-tra",
+  "state": "building",
+  "subtasks": {
+    "completed": 2,
+    "total": 23,
+    "in_progress": 1,
+    "failed": 0
+  },
+  "phase": {
+    "current": "Project Setup",
+    "id": null,
+    "total": 3
+  },
+  "workers": {
+    "active": 0,
+    "max": 1
+  },
+  "session": {
+    "number": 20,
+    "started_at": "2026-01-12T12:02:01.085506"
+  },
+  "last_update": "2026-01-12T12:06:30.197763"
+}

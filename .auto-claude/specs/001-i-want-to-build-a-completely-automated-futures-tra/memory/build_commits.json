@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "hash": "c13320ed2ed674efbaf2e7fd682417f1d7bd8a84",
+      "subtask_id": "subtask-1-1",
+      "timestamp": "2026-01-12T12:04:47.382584"
+    },
+    {
+      "hash": "aaca97ed176a776e274a83c8ea8e4acc18b1b5e5",
+      "subtask_id": "subtask-1-2",
+      "timestamp": "2026-01-12T12:06:24.836029"
+    }
+  ],
+  "last_good_commit": "aaca97ed176a776e274a83c8ea8e4acc18b1b5e5",
+  "metadata": {
+    "created_at": "2026-01-12T12:02:01.085348",
+    "last_updated": "2026-01-12T12:06:24.836037"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Glob(./**)",
+      "Grep(./**)",
+      "Read(/Users/trade/Development/FullFuture/full-futures/.worktrees/001-i-want-to-build-a-completely-automated-futures-tra/**)",
+      "Write(/Users/trade/Development/FullFuture/full-futures/.worktrees/001-i-want-to-build-a-completely-automated-futures-tra/**)",
+      "Edit(/Users/trade/Development/FullFuture/full-futures/.worktrees/001-i-want-to-build-a-completely-automated-futures-tra/**)",
+      "Glob(/Users/trade/Development/FullFuture/full-futures/.worktrees/001-i-want-to-build-a-completely-automated-futures-tra/**)",
+      "Grep(/Users/trade/Development/FullFuture/full-futures/.worktrees/001-i-want-to-build-a-completely-automated-futures-tra/**)",
+      "Read(/Users/trade/Development/FullFuture/full-futures/.worktrees/001-i-want-to-build-a-completely-automated-futures-tra/.auto-claude/specs/001-i-want-to-build-a-completely-automated-futures-tra/**)",
+      "Write(/Users/trade/Development/FullFuture/full-futures/.worktrees/001-i-want-to-build-a-completely-automated-futures-tra/.auto-claude/specs/001-i-want-to-build-a-completely-automated-futures-tra/**)",
+      "Edit(/Users/trade/Development/FullFuture/full-futures/.worktrees/001-i-want-to-build-a-completely-automated-futures-tra/.auto-claude/specs/001-i-want-to-build-a-completely-automated-futures-tra/**)",
+      "Bash(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "mcp__context7__resolve-library-id(*)",
+      "mcp__context7__get-library-docs(*)",
+      "mcp__graphiti-memory__search_nodes(*)",
+      "mcp__graphiti-memory__search_facts(*)",
+      "mcp__graphiti-memory__add_episode(*)",
+      "mcp__graphiti-memory__get_episodes(*)",
+      "mcp__graphiti-memory__get_entity_edge(*)"
+    ]
+  }
+}

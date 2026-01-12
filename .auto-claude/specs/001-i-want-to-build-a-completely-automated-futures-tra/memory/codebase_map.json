@@ -1,0 +1,15 @@
+{
+  "discovered_files": {
+    "requirements.txt": {
+      "description": "Python dependencies file with 9 packages: ib_async (IB API), river (online ML), dash/plotly/dash-bootstrap-components (dashboard), pandas/numpy (data), pandas_market_calendars (exchange calendars), aiohttp (async HTTP)",
+      "category": "dependencies",
+      "discovered_at": "2026-01-12T17:04:35.837781+00:00"
+    },
+    "config.py": {
+      "description": "Dynamic configuration module using dataclass with environment variable support. Uses get_config() singleton pattern. Default values: IB_HOST=127.0.0.1, IB_PORT=7497, IB_CLIENT_ID=1, DASHBOARD_PORT=8050. All settings can be overridden via environment variables.",
+      "category": "configuration",
+      "discovered_at": "2026-01-12T17:06:18.236449+00:00"
+    }
+  },
+  "last_updated": "2026-01-12T17:06:18.236459+00:00"
+}

@@ -1,0 +1,625 @@
+{
+  "integrations_researched": [
+    {
+      "name": "ib_async",
+      "type": "library",
+      "description": "Python sync/async framework for Interactive Brokers API - successor to ib_insync",
+      "verified_package": {
+        "name": "ib_async",
+        "install_command": "pip install ib_async",
+        "version": ">=2.1.0",
+        "python_version": ">=3.10",
+        "verified": true
+      },
+      "api_patterns": {
+        "imports": [
+          "from ib_async import *",
+          "from ib_async import IB, Stock, Future, Forex, Contract",
+          "from ib_async import MarketOrder, LimitOrder, StopOrder, StopLimitOrder",
+          "from ib_async import util"
+        ],
+        "initialization": "ib = IB()\nib.connect('127.0.0.1', 7497, clientId=1)",
+        "async_initialization": "ib = IB()\nawait ib.connectAsync('127.0.0.1', 7497, clientId=1)",
+        "key_functions": [
+          "ib.connect(host, port, clientId)",
+          "ib.connectAsync(host, port, clientId)",
+          "ib.disconnect()",
+          "ib.qualifyContracts(contract)",
+          "ib.reqContractDetails(contract)",
+          "ib.reqMktData(contract)",
+          "ib.reqMktDepth(contract)",
+          "ib.reqHistoricalData(contract, ...)",
+          "ib.placeOrder(contract, order)",
+          "ib.cancelOrder(order)",
+          "ib.positions()",
+          "ib.portfolio()",
+          "ib.accountValues()",
+          "ib.openOrders()",
+          "ib.fills()",
+          "ib.sleep(seconds)",
+          "util.startLoop()"
+        ],
+        "contract_types": {
+          "futures": "Future('ES', '202503', 'CME')",
+          "futures_continuous": "ContFuture('ES', 'CME')",
+          "stock": "Stock('AAPL', 'SMART', 'USD')",
+          "forex": "Forex('EURUSD')"
+        },
+        "market_depth_example": "ticker = ib.reqMktDepth(contract)\nbids = ticker.domBids\nasks = ticker.domAsks",
+        "verified_against": "GitHub README, ib-api-reloaded.github.io/ib_async"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "dependencies": [],
+        "tws_settings": {
+          "api_enabled": true,
+          "port_tws": 7497,
+          "port_gateway": 4001,
+          "trusted_ips": ["127.0.0.1"],
+          "download_open_orders": true,
+          "java_memory_min": "4096 MB"
+        }
+      },
+      "infrastructure": {
+        "requires_docker": false,
+        "requires_tws_or_gateway": true,
+        "tws_or_gateway_running": "Must have IB TWS or Gateway running with API enabled"
+      },
+      "gotchas": [
+        "ibapi package from IB is NOT needed - ib_async implements full IBKR API protocol internally",
+        "Each connection requires unique clientId",
+        "Free delayed data uses reqMarketDataType(3) or (4); real-time requires paid subscriptions",
+        "Market data lines limited to 100 per username",
+        "Level 2 market depth requires specific subscriptions",
+        "Futures historical data limited to 2 years",
+        "Bar sizes 30 seconds and lower limited to 6 months of history",
+        "Continuous futures (CONTFUT) only for historical data, not real-time or orders",
+        "Need $500 USD in account plus cost of market data subscriptions for live data",
+        "ib_insync creator (Ewald de Wit) passed away in early 2024 - ib_async is the maintained successor"
+      ],
+      "research_sources": [
+        "https://github.com/ib-api-reloaded/ib_async",
+        "https://ib-api-reloaded.github.io/ib_async/",
+        "https://pypi.org/project/ib-async/",
+        "https://interactivebrokers.github.io/tws-api/market_depth.html"
+      ]
+    },
+    {
+      "name": "Dash",
+      "type": "library",
+      "description": "Python framework for building ML & data science web apps with real-time visualization",
+      "verified_package": {
+        "name": "dash",
+        "install_command": "pip install dash",
+        "version": ">=3.3.0",
+        "python_version": ">=3.8",
+        "verified": true
+      },
+      "api_patterns": {
+        "imports": [
+          "from dash import Dash, html, dcc, callback, Input, Output, State",
+          "import dash_bootstrap_components as dbc",
+          "import plotly.graph_objects as go",
+          "import plotly.express as px"
+        ],
+        "initialization": "app = Dash(__name__)\napp.layout = html.Div([...])\napp.run_server(debug=True)",
+        "key_functions": [
+          "Dash(__name__)",
+          "@callback(Output(...), Input(...))",
+          "dcc.Interval(id='interval', interval=1000)",
+          "dcc.Graph(id='graph', figure=fig)",
+          "app.run_server(debug=True, port=8050)"
+        ],
+        "real_time_pattern": "dcc.Interval(id='interval-component', interval=1000, n_intervals=0) with callback to update graph",
+        "verified_against": "PyPI, Real Python, Plotly documentation"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "dependencies": [
+          "plotly",
+          "flask",
+          "werkzeug"
+        ]
+      },
+      "infrastructure": {
+        "requires_docker": false,
+        "default_port": 8050
+      },
+      "gotchas": [
+        "For high-frequency real-time updates, consider WebSocket integration instead of Interval polling",
+        "Large datasets may cause browser performance issues - use downsampling",
+        "Debug mode should be disabled in production",
+        "Consider using dash-bootstrap-components for better UI"
+      ],
+      "research_sources": [
+        "https://pypi.org/project/dash/",
+        "https://realpython.com/python-dash/",
+        "https://community.plotly.com/t/is-it-possible-to-use-plotly-dash-with-real-time-data/90257"
+      ]
+    },
+    {
+      "name": "River",
+      "type": "library",
+      "description": "Online machine learning library for streaming data with incremental learning",
+      "verified_package": {
+        "name": "river",
+        "install_command": "pip install river",
+        "version": ">=0.23.0",
+        "python_version": ">=3.10, <3.15",
+        "verified": true
+      },
+      "api_patterns": {
+        "imports": [
+          "from river import compose, linear_model, metrics, preprocessing",
+          "from river import tree, ensemble, drift, anomaly",
+          "from river import time_series, cluster, stats",
+          "from river.datasets import Phishing"
+        ],
+        "initialization": "model = compose.Pipeline(\n    preprocessing.StandardScaler(),\n    linear_model.LogisticRegression()\n)\nmetric = metrics.Accuracy()",
+        "key_functions": [
+          "model.predict_one(x)",
+          "model.predict_proba_one(x)",
+          "model.learn_one(x, y)",
+          "metric.update(y_true, y_pred)",
+          "metric.get()"
+        ],
+        "online_learning_pattern": "for x, y in stream:\n    y_pred = model.predict_one(x)\n    metric.update(y, y_pred)\n    model.learn_one(x, y)",
+        "available_models": {
+          "regression": [
+            "linear_model.LinearRegression",
+            "tree.HoeffdingTreeRegressor",
+            "ensemble.BaggingRegressor",
+            "ensemble.AdaptiveRandomForestRegressor"
+          ],
+          "classification": [
+            "linear_model.LogisticRegression",
+            "linear_model.PAClassifier",
+            "tree.HoeffdingTreeClassifier",
+            "ensemble.BaggingClassifier",
+            "ensemble.AdaptiveRandomForestClassifier"
+          ],
+          "drift_detection": [
+            "drift.ADWIN",
+            "drift.PageHinkley",
+            "drift.DDM",
+            "drift.EDDM"
+          ],
+          "anomaly_detection": [
+            "anomaly.HalfSpaceTrees",
+            "anomaly.OneClassSVM"
+          ]
+        },
+        "verified_against": "GitHub README, PyPI, riverml.xyz"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "dependencies": []
+      },
+      "infrastructure": {
+        "requires_docker": false
+      },
+      "gotchas": [
+        "Uses learn_one() NOT fit_one() (different from older creme library)",
+        "Data passed as Python dict (not numpy arrays/DataFrames) for single instances",
+        "Order of magnitude faster than PyTorch/TensorFlow/sklearn for single-instance learning",
+        "Drift detection crucial for trading - markets exhibit concept drift",
+        "Models don't need retraining - they adapt continuously",
+        "For deep learning, use deep-river extension (combines with PyTorch)"
+      ],
+      "research_sources": [
+        "https://github.com/online-ml/river",
+        "https://pypi.org/project/river/",
+        "https://riverml.xyz/",
+        "https://www.jmlr.org/papers/v22/20-1380.html"
+      ]
+    },
+    {
+      "name": "pandas_market_calendars",
+      "type": "library",
+      "description": "Exchange trading calendars for market hours, holidays, and early closes",
+      "verified_package": {
+        "name": "pandas_market_calendars",
+        "install_command": "pip install pandas_market_calendars",
+        "version": ">=5.2.4",
+        "python_version": ">=3.9",
+        "verified": true
+      },
+      "api_patterns": {
+        "imports": [
+          "import pandas_market_calendars as mcal"
+        ],
+        "initialization": "cme = mcal.get_calendar('CME')",
+        "key_functions": [
+          "mcal.get_calendar('CME')",
+          "mcal.get_calendar_names()",
+          "calendar.schedule(start_date, end_date)",
+          "calendar.valid_days(start_date, end_date)",
+          "calendar.open_at_time(schedule, timestamp)"
+        ],
+        "verified_against": "PyPI documentation"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "dependencies": [
+          "pandas",
+          "pytz"
+        ]
+      },
+      "infrastructure": {
+        "requires_docker": false
+      },
+      "supported_futures_exchanges": [
+        "CME",
+        "CBOT",
+        "COMEX",
+        "NYMEX",
+        "ICE"
+      ],
+      "gotchas": [
+        "50+ exchange calendars supported",
+        "Provides market open/close times with timezone support",
+        "Handles intraday breaks (e.g., Asian market lunch breaks)",
+        "Holiday and early close calendars included"
+      ],
+      "research_sources": [
+        "https://pypi.org/project/pandas-market-calendars/"
+      ]
+    },
+    {
+      "name": "exchange_calendars",
+      "type": "library",
+      "description": "Alternative exchange calendar library with trading schedules and sessions",
+      "verified_package": {
+        "name": "exchange_calendars",
+        "install_command": "pip install exchange_calendars",
+        "version": ">=4.12",
+        "python_version": ">=3.10, <4",
+        "verified": true
+      },
+      "api_patterns": {
+        "imports": [
+          "import exchange_calendars as xcals"
+        ],
+        "initialization": "calendar = xcals.get_calendar('XCME')",
+        "key_functions": [
+          "xcals.get_calendar('XCME')",
+          "xcals.get_calendar_names()",
+          "calendar.sessions_in_range(start, end)",
+          "calendar.session_open(session)",
+          "calendar.session_close(session)"
+        ],
+        "verified_against": "PyPI documentation"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "dependencies": [
+          "pandas",
+          "numpy"
+        ]
+      },
+      "infrastructure": {
+        "requires_docker": false
+      },
+      "supported_futures_exchanges": [
+        "XCME (CME)",
+        "XCBT (CBOT)",
+        "XNYM (NYMEX)"
+      ],
+      "gotchas": [
+        "Uses ISO MIC codes (XCME vs CME)",
+        "Formerly trading_calendars from Quantopian",
+        "50+ global exchanges supported",
+        "Provides session open/close times and breaks"
+      ],
+      "research_sources": [
+        "https://pypi.org/project/exchange-calendars/"
+      ]
+    },
+    {
+      "name": "NumPy",
+      "type": "library",
+      "description": "Fundamental package for numerical computing in Python",
+      "verified_package": {
+        "name": "numpy",
+        "install_command": "pip install numpy",
+        "version": ">=1.26.0",
+        "python_version": ">=3.9",
+        "verified": true
+      },
+      "api_patterns": {
+        "imports": [
+          "import numpy as np"
+        ],
+        "key_functions": [
+          "np.array()",
+          "np.mean(), np.std(), np.var()",
+          "np.cumsum(), np.cumprod()",
+          "np.diff()",
+          "np.correlate()",
+          "np.percentile()"
+        ],
+        "verified_against": "Common knowledge - core Python scientific stack"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "dependencies": []
+      },
+      "infrastructure": {
+        "requires_docker": false
+      },
+      "gotchas": [
+        "Use appropriate dtypes (float32 vs float64) for memory efficiency",
+        "Vectorized operations crucial for performance",
+        "Consider numba for JIT compilation of hot paths"
+      ],
+      "research_sources": [
+        "https://numpy.org/",
+        "https://pypi.org/project/numpy/"
+      ]
+    },
+    {
+      "name": "Pandas",
+      "type": "library",
+      "description": "Data analysis and manipulation library with DataFrame structures",
+      "verified_package": {
+        "name": "pandas",
+        "install_command": "pip install pandas",
+        "version": ">=2.0.0",
+        "python_version": ">=3.9",
+        "verified": true
+      },
+      "api_patterns": {
+        "imports": [
+          "import pandas as pd"
+        ],
+        "key_functions": [
+          "pd.DataFrame()",
+          "df.rolling(window)",
+          "df.ewm(span=n)",
+          "df.resample('1min')",
+          "df.shift()",
+          "df.pct_change()"
+        ],
+        "verified_against": "Common knowledge - core Python data science stack"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "dependencies": [
+          "numpy",
+          "pytz"
+        ]
+      },
+      "infrastructure": {
+        "requires_docker": false
+      },
+      "gotchas": [
+        "Use category dtype for repeated strings to save memory",
+        "Rolling windows for streaming calculations",
+        "Consider Polars for extreme performance needs"
+      ],
+      "research_sources": [
+        "https://pandas.pydata.org/",
+        "https://pypi.org/project/pandas/"
+      ]
+    },
+    {
+      "name": "asyncio",
+      "type": "builtin",
+      "description": "Python's built-in async I/O library for concurrent programming",
+      "verified_package": {
+        "name": "asyncio",
+        "install_command": "Built-in to Python 3.4+",
+        "version": "Built-in",
+        "python_version": ">=3.4",
+        "verified": true
+      },
+      "api_patterns": {
+        "imports": [
+          "import asyncio"
+        ],
+        "initialization": "asyncio.run(main())",
+        "key_functions": [
+          "asyncio.run(coro)",
+          "asyncio.create_task(coro)",
+          "asyncio.gather(*coros)",
+          "asyncio.sleep(seconds)",
+          "asyncio.Queue()",
+          "asyncio.Event()",
+          "asyncio.Lock()"
+        ],
+        "async_pattern": "async def main():\n    await some_async_function()",
+        "verified_against": "Python documentation"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "dependencies": []
+      },
+      "infrastructure": {
+        "requires_docker": false
+      },
+      "gotchas": [
+        "Single thread, single process model with event loop",
+        "Best for I/O-bound workloads with high concurrency",
+        "Thousands of coroutines can run in one thread",
+        "ib_async is built on asyncio - they integrate seamlessly",
+        "Use async context managers for cleanup"
+      ],
+      "research_sources": [
+        "https://docs.python.org/3/library/asyncio.html"
+      ]
+    },
+    {
+      "name": "Interactive Brokers Market Data",
+      "type": "service",
+      "description": "IB's market data service requirements for Level 1 and Level 2 data",
+      "verified_package": {
+        "name": "N/A - IB Service",
+        "install_command": "N/A - Requires IB account subscription",
+        "version": "N/A",
+        "verified": true
+      },
+      "api_patterns": {
+        "level_1_request": "ib.reqMktData(contract, genericTickList='', snapshot=False)",
+        "level_2_request": "ib.reqMktDepth(contract, numRows=5)",
+        "smart_routing_depth": "Available in API v974+ for aggregated depth from all exchanges",
+        "key_ticker_attributes": {
+          "level_1": [
+            "ticker.bid",
+            "ticker.ask",
+            "ticker.last",
+            "ticker.volume",
+            "ticker.high",
+            "ticker.low",
+            "ticker.close"
+          ],
+          "level_2": [
+            "ticker.domBids",
+            "ticker.domAsks"
+          ]
+        },
+        "verified_against": "IB TWS API documentation"
+      },
+      "configuration": {
+        "env_vars": [],
+        "config_files": [],
+        "requirements": [
+          "Active IB account",
+          "Market data subscriptions for each exchange",
+          "$500 USD minimum in account plus subscription costs",
+          "100 market data lines limit per username"
+        ]
+      },
+      "infrastructure": {
+        "requires_tws_or_gateway": true
+      },
+      "gotchas": [
+        "Level 2 market depth data sent without sampling but not guaranteed complete",
+        "Odd lot orders not included in market depth",
+        "reqMarketDataType(3) or (4) for delayed data without subscription",
+        "Smart-routing market depth requires API v974+ and TWS v974+",
+        "CME futures require CME Real-time subscription for live data"
+      ],
+      "research_sources": [
+        "https://interactivebrokers.github.io/tws-api/market_depth.html",
+        "https://interactivebrokers.github.io/tws-api/market_data.html",
+        "https://www.interactivebrokers.com/campus/ibkr-api-page/market-data-subscriptions/"
+      ]
+    },
+    {
+      "name": "CME Trading Calendar",
+      "type": "service",
+      "description": "CME Group trading hours and holiday schedules for futures markets",
+      "verified_package": {
+        "name": "N/A - External Reference",
+        "install_command": "N/A - Use pandas_market_calendars or exchange_calendars",
+        "version": "N/A",
+        "verified": true
+      },
+      "api_patterns": {
+        "cme_api_available": true,
+        "api_description": "CME Reference Data API provides trading schedules including 1 year historical and 1 year forward-looking",
+        "verified_against": "CME Group documentation"
+      },
+      "trading_hours": {
+        "globex_electronic": "Nearly 24/5 (varies by product)",
+        "typical_equity_futures": "Sunday 5:00 PM CT to Friday 4:00 PM CT",
+        "early_close_days": "Usually 1:00 PM CT for equity products",
+        "timezone": "US Central Time (CT)"
+      },
+      "infrastructure": {
+        "requires_docker": false
+      },
+      "gotchas": [
+        "Trading hours vary by product - always verify per contract",
+        "Holiday schedules published ~2 weeks in advance",
+        "Early close days have reduced trading hours",
+        "Use pandas_market_calendars or exchange_calendars for programmatic access"
+      ],
+      "research_sources": [
+        "https://www.cmegroup.com/trading-hours.html",
+        "https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457217339/",
+        "https://www.quantconnect.com/docs/v2/writing-algorithms/securities/asset-classes/futures/market-hours/cme"
+      ]
+    }
+  ],
+  "unverified_claims": [
+    {
+      "claim": "Mac Ultra can utilize 80% of resources for rapid strategy discovery",
+      "reason": "Hardware-specific optimization is feasible but actual utilization depends on implementation - Python GIL limits CPU parallelism for pure Python code",
+      "risk_level": "low",
+      "mitigation": "Use multiprocessing for CPU-bound tasks, asyncio for I/O-bound tasks, and consider NumPy/Numba for vectorized operations"
+    },
+    {
+      "claim": "Demo account supports unlimited aggressive experimentation",
+      "reason": "IB demo accounts have limitations - may have simulated fills, delayed data, and different behavior than live accounts",
+      "risk_level": "medium",
+      "mitigation": "Test critical functionality, be aware demo may not perfectly replicate live trading conditions"
+    }
+  ],
+  "recommendations": [
+    {
+      "recommendation": "Use ib_async over ibapi or ib_insync",
+      "reason": "ib_async is the actively maintained successor to ib_insync, implements full IBKR protocol internally (no ibapi dependency), and has modern async support"
+    },
+    {
+      "recommendation": "Use River for online/incremental machine learning",
+      "reason": "River is specifically designed for streaming data, supports concept drift detection (critical for financial markets), and is much faster than batch ML for single-instance learning"
+    },
+    {
+      "recommendation": "Use Dash with WebSocket integration for real-time dashboard",
+      "reason": "Dash's Interval component works for moderate update frequencies, but WebSocket integration is better for high-frequency trading data visualization"
+    },
+    {
+      "recommendation": "Use pandas_market_calendars for exchange calendar management",
+      "reason": "Actively maintained, supports CME and other futures exchanges, provides holiday schedules and early closes"
+    },
+    {
+      "recommendation": "Ensure IB market data subscriptions are active before going live",
+      "reason": "Level 1 and Level 2 data require paid subscriptions; without them, only delayed data is available"
+    },
+    {
+      "recommendation": "Implement concept drift detection with River's drift module",
+      "reason": "Financial markets exhibit concept drift - strategies that work in one regime may fail in another. ADWIN, PageHinkley, DDM are available"
+    },
+    {
+      "recommendation": "Use asyncio throughout the application architecture",
+      "reason": "ib_async is built on asyncio - consistent async patterns will provide better performance and cleaner code"
+    },
+    {
+      "recommendation": "Consider multiprocessing for CPU-intensive ML operations",
+      "reason": "Python GIL limits true CPU parallelism in threads - use multiprocessing for parallel model training/prediction"
+    }
+  ],
+  "dependency_summary": {
+    "core_packages": [
+      "ib_async>=2.1.0",
+      "river>=0.23.0",
+      "dash>=3.3.0",
+      "pandas>=2.0.0",
+      "numpy>=1.26.0",
+      "pandas_market_calendars>=5.2.4"
+    ],
+    "optional_packages": [
+      "dash-bootstrap-components",
+      "plotly>=5.0.0",
+      "exchange_calendars>=4.12",
+      "numba"
+    ],
+    "python_version": ">=3.10"
+  },
+  "research_summary": {
+    "total_integrations": 10,
+    "verified": 10,
+    "partially_verified": 0,
+    "unverified": 0
+  },
+  "created_at": "2025-01-12T12:00:00Z"
+}
