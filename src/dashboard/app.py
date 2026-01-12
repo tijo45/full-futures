@@ -212,6 +212,10 @@ def create_app() -> Dash:
     # Register core callbacks
     _register_callbacks(app)
 
+    # Register full callbacks from callbacks module
+    from .callbacks import register_callbacks
+    register_callbacks(app)
+
     logger.info("Dash application created successfully")
     return app
 
