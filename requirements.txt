@@ -1,0 +1,23 @@
+# Autonomous Futures Trading Bot Dependencies
+# ============================================
+
+# Interactive Brokers API
+ib_async>=2.1.0
+
+# Online Machine Learning
+river>=0.23.0
+
+# Dashboard and Visualization
+dash>=3.3.0
+plotly>=5.18.0
+dash-bootstrap-components>=1.5.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.26.0
+
+# Market Calendars
+pandas_market_calendars>=5.2.4
+
+# Async HTTP
+aiohttp>=3.9.0
