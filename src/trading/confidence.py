@@ -727,6 +727,30 @@ class ConfidenceTracker:
                 f"Regime changed: {old_regime} -> {regime} (stability={stability:.3f})"
             )
 
+    def set_threshold_mode(self, mode: str, factor: float = 1.2) -> None:
+        """
+        Set the threshold mode directly.
+
+        Allows external components to adjust threshold mode based on
+        system-wide conditions (e.g., drift detection, risk events).
+
+        Args:
+            mode: Mode name ('NORMAL', 'CAUTIOUS', or 'AGGRESSIVE')
+            factor: Multiplier for threshold adjustment (default 1.2)
+        """
+        mode_upper = mode.upper()
+        if mode_upper == 'NORMAL':
+            self._global_threshold.set_mode(ThresholdMode.NORMAL, factor)
+        elif mode_upper == 'CAUTIOUS':
+            self._global_threshold.set_mode(ThresholdMode.CAUTIOUS, factor)
+        elif mode_upper == 'AGGRESSIVE':
+            self._global_threshold.set_mode(ThresholdMode.AGGRESSIVE, factor)
+        else:
+            self._logger.warning(f"Unknown threshold mode: {mode}")
+            return
+
+        self._logger.info(f"Threshold mode set to {mode_upper} with factor {factor}")
+
     def record_outcome(
         self,
         success: bool,
