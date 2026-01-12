@@ -21,3 +21,6 @@ pandas_market_calendars>=5.2.4
 
 # Async HTTP
 aiohttp>=3.9.0
+
+# System Monitoring
+psutil>=5.9.0
