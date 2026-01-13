@@ -1,0 +1,4 @@
+.venv
+.venv/*
+.auto-claude
+.auto-claude/*
