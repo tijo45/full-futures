@@ -348,21 +348,31 @@ class TradingBot:
         """Subscribe to market data for active contracts."""
         self._logger.info(f"Subscribing to market data for {len(self._active_contracts)} contracts...")
 
+        # IB limits Level 2 depth subscriptions to 3 for most account types
+        max_level_2_subscriptions = 3
+        level_2_count = 0
+
         for dc in self._active_contracts:
             try:
-                # Subscribe to both Level 1 and Level 2 data
-                await self._market_data_handler.subscribe_all(
-                    dc.contract,
-                    num_rows=5,  # 5 levels of order book depth
-                )
+                # Subscribe to Level 1 for all contracts
+                await self._market_data_handler.subscribe_level_1(dc.contract)
+
+                # Subscribe to Level 2 only for the first few contracts (IB limit)
+                if level_2_count < max_level_2_subscriptions:
+                    await self._market_data_handler.subscribe_level_2(
+                        dc.contract,
+                        num_rows=5,  # 5 levels of order book depth
+                    )
+                    level_2_count += 1
+                    self._logger.debug(f"Subscribed to L1+L2 for {dc.symbol}")
+                else:
+                    self._logger.debug(f"Subscribed to L1 only for {dc.symbol} (L2 limit reached)")
 
                 # Set contract multiplier for position manager
                 self._position_manager.set_contract_multiplier(
                     dc.contract.conId,
                     dc.multiplier,
                 )
-
-                self._logger.debug(f"Subscribed to {dc.symbol}")
 
             except Exception as e:
                 self._logger.error(f"Failed to subscribe to {dc.symbol}: {e}")

@@ -2,3 +2,6 @@
 .venv/*
 .auto-claude
 .auto-claude/*
+__pycache__/
+*.pyc
+

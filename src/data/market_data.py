@@ -15,6 +15,7 @@ Key Features:
 
 import asyncio
 import logging
+import math
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional, Dict, Callable, Awaitable, Any, List
@@ -594,6 +595,17 @@ class MarketDataHandler:
         if self._on_depth:
             asyncio.create_task(self._on_depth(depth_data))
 
+    def _safe_int(self, value: Any) -> Optional[int]:
+        """Safely convert a value to int, returning None if NaN or invalid."""
+        if value is None:
+            return None
+        try:
+            if isinstance(value, float) and math.isnan(value):
+                return None
+            return int(value)
+        except (ValueError, TypeError):
+            return None
+
     def _extract_tick_data(self, contract_id: int, ticker: Ticker) -> TickData:
         """Extract TickData from IB Ticker object."""
         sub = self._subscriptions[contract_id]
@@ -603,12 +615,12 @@ class MarketDataHandler:
             symbol=sub.symbol,
             timestamp=datetime.now(timezone.utc),
             bid=ticker.bid if hasattr(ticker, 'bid') and ticker.bid else None,
-            bid_size=int(ticker.bidSize) if hasattr(ticker, 'bidSize') and ticker.bidSize else None,
+            bid_size=self._safe_int(ticker.bidSize) if hasattr(ticker, 'bidSize') else None,
             ask=ticker.ask if hasattr(ticker, 'ask') and ticker.ask else None,
-            ask_size=int(ticker.askSize) if hasattr(ticker, 'askSize') and ticker.askSize else None,
+            ask_size=self._safe_int(ticker.askSize) if hasattr(ticker, 'askSize') else None,
             last=ticker.last if hasattr(ticker, 'last') and ticker.last else None,
-            last_size=int(ticker.lastSize) if hasattr(ticker, 'lastSize') and ticker.lastSize else None,
-            volume=int(ticker.volume) if hasattr(ticker, 'volume') and ticker.volume else None,
+            last_size=self._safe_int(ticker.lastSize) if hasattr(ticker, 'lastSize') else None,
+            volume=self._safe_int(ticker.volume) if hasattr(ticker, 'volume') else None,
             high=ticker.high if hasattr(ticker, 'high') and ticker.high else None,
             low=ticker.low if hasattr(ticker, 'low') and ticker.low else None,
             open=ticker.open if hasattr(ticker, 'open') and ticker.open else None,
@@ -627,20 +639,24 @@ class MarketDataHandler:
         if hasattr(ticker, 'domBids') and ticker.domBids:
             for level in ticker.domBids:
                 if level.price and level.size:
-                    bids.append(OrderBookLevel(
-                        price=level.price,
-                        size=int(level.size),
-                        market_maker=level.marketMaker if hasattr(level, 'marketMaker') else "",
-                    ))
+                    size = self._safe_int(level.size)
+                    if size is not None:
+                        bids.append(OrderBookLevel(
+                            price=level.price,
+                            size=size,
+                            market_maker=level.marketMaker if hasattr(level, 'marketMaker') else "",
+                        ))
 
         if hasattr(ticker, 'domAsks') and ticker.domAsks:
             for level in ticker.domAsks:
                 if level.price and level.size:
-                    asks.append(OrderBookLevel(
-                        price=level.price,
-                        size=int(level.size),
-                        market_maker=level.marketMaker if hasattr(level, 'marketMaker') else "",
-                    ))
+                    size = self._safe_int(level.size)
+                    if size is not None:
+                        asks.append(OrderBookLevel(
+                            price=level.price,
+                            size=size,
+                            market_maker=level.marketMaker if hasattr(level, 'marketMaker') else "",
+                        ))
 
         return DepthData(
             contract_id=contract_id,
